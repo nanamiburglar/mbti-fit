@@ -417,7 +417,7 @@ body::after{
     <div class="gate-err" id="gate-err">Неверный код</div>
     <button class="btn-primary" style="width:100%;justify-content:center;" onclick="checkPw()">Войти</button>
     <br><br>
-    <span style="font-size:.78rem;color:var(--muted);cursor:pointer;text-underline-offset:3px;text-decoration:underline;" onclick="show('intro')">Назад</span>
+    <span style="font-size:.78rem;color:var(--muted);cursor:pointer;text-underline-offset:3px;text-decoration:underline;" onclick="resetState();show('intro')">Назад</span>
   </div>
 </div>
 
@@ -486,7 +486,7 @@ body::after{
     </div>
 
     <button class="btn-sec" onclick="retake()">Пройти заново</button>
-    <button class="btn-sec" style="margin-top:.5rem;" onclick="show('intro')">На главную</button>
+    <button class="btn-sec" style="margin-top:.5rem;" onclick="resetState();show('intro')">На главную</button>
 
     <div class="rfooter">
       Создано студентами ФИТ НГУ:<br>
@@ -501,7 +501,7 @@ body::after{
   <div class="swrap">
     <div class="stats-header">
       <h2>Статистика прохождений</h2>
-      <button class="btn-ghost" onclick="show('intro')">На главную</button>
+      <button class="btn-ghost" onclick="resetState();show('intro')">На главную</button>
     </div>
     <div class="stat-cards" id="stat-cards"></div>
     <div class="chart-sec">
@@ -1044,7 +1044,8 @@ function show(id){
   document.getElementById('screen-'+id).classList.add('active');
   window.scrollTo(0,0);
 }
-function startQuiz(){show('quiz');renderQ();}
+function resetState(){answers=new Array(TOTAL_Q).fill(null);cur=0;}
+function startQuiz(){resetState();show('quiz');renderQ();}
 function retake(){answers=new Array(TOTAL_Q).fill(null);cur=0;show('quiz');renderQ();}
 
 function renderQ(){
