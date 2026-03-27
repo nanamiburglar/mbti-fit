@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MBTI x IT — НГУ ФИТ</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#07080d;
+  --s1:#0e0f17;
+  --s2:#13141f;
+  --s3:#1a1b28;
+  --border:rgba(255,255,255,0.06);
+  --border2:rgba(255,255,255,0.12);
+  --a1:#00e5b0;
+  --a2:#0099ff;
+  --a3:#7b61ff;
+  --text:#eeeef5;
+  --muted:#636380;
+  --muted2:#8888a8;
+  --red:#ff5e6b;
+  --green:#00e5b0;
+  --yellow:#f5c842;
+  --r:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'DM Sans',sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+body::before{
+  content:'';
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% 0%,rgba(0,229,176,.07) 0%,transparent 55%),
+    radial-gradient(ellipse 50% 40% at 85% 90%,rgba(0,153,255,.06) 0%,transparent 55%),
+    radial-gradient(ellipse 40% 30% at 55% 45%,rgba(123,97,255,.04) 0%,transparent 50%);
+}
+/* grid bg */
+body::after{
+  content:'';
+  position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+
+/* ─── SCREENS ─── */
+.screen{position:relative;z-index:2;display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
+
+/* ─── INTRO ─── */
+#screen-intro{
+  align-items:center;justify-content:center;
+  padding:2rem 1.5rem;text-align:center;
+}
+.intro-eyebrow{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:rgba(0,229,176,.08);border:1px solid rgba(0,229,176,.2);
+  border-radius:4px;padding:.3rem .85rem;
+  font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--a1);margin-bottom:2.5rem;font-weight:500;
+  animation:up .5s ease both;
+}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--a1);animation:blink 2s infinite;}
+.intro-title{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(3rem,10vw,8rem);
+  font-weight:800;line-height:.95;letter-spacing:-.02em;
+  color:#fff;margin-bottom:.4rem;
+  animation:up .5s .08s ease both;
+}
+.intro-title span{
+  background:linear-gradient(120deg,var(--a1),var(--a2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.intro-subtitle{
+  font-size:clamp(1rem,2vw,1.15rem);
+  color:var(--muted2);max-width:500px;margin:0 auto 1rem;
+  line-height:1.7;font-weight:300;
+  animation:up .5s .15s ease both;
+}
+.intro-authors{
+  font-size:.8rem;color:var(--muted);margin-bottom:2.5rem;letter-spacing:.02em;
+  animation:up .5s .2s ease both;
+}
+.intro-authors strong{color:var(--muted2);}
+.intro-pills{
+  display:flex;flex-wrap:wrap;gap:.5rem;justify-content:center;
+  margin-bottom:2.5rem;
+  animation:up .5s .25s ease both;
+}
+.pill{
+  background:var(--s2);border:1px solid var(--border);
+  border-radius:4px;padding:.35rem .85rem;font-size:.75rem;color:var(--muted2);
+}
+.btn-primary{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:var(--a1);color:#07080d;border:none;cursor:pointer;
+  font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;
+  padding:.9rem 2.2rem;border-radius:6px;letter-spacing:.02em;
+  transition:transform .2s,box-shadow .2s,opacity .2s;
+  box-shadow:0 0 32px rgba(0,229,176,.3);
+  animation:up .5s .3s ease both;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 0 48px rgba(0,229,176,.45);}
+.intro-note{font-size:.75rem;color:var(--muted);margin-top:1.2rem;animation:up .5s .35s ease both;}
+
+/* ─── QUIZ ─── */
+#screen-quiz{padding:1.5rem 1rem;align-items:center;}
+.qheader{
+  width:100%;max-width:700px;margin:0 auto 2rem;
+  display:flex;align-items:center;gap:1.5rem;
+}
+.qlogo{
+  font-family:'Syne',sans-serif;font-size:.9rem;font-weight:800;
+  color:var(--a1);white-space:nowrap;letter-spacing:.05em;
+}
+.qprog{flex:1;}
+.qprog-top{
+  display:flex;justify-content:space-between;
+  font-size:.72rem;color:var(--muted);margin-bottom:.5rem;
+}
+.qtrack{height:2px;background:var(--s3);border-radius:999px;overflow:hidden;}
+.qfill{
+  height:100%;background:linear-gradient(90deg,var(--a1),var(--a2));
+  border-radius:999px;transition:width .4s ease;
+}
+.qphase{
+  font-size:.68rem;color:var(--a1);letter-spacing:.1em;text-transform:uppercase;font-weight:600;
+  text-align:right;margin-top:.35rem;
+}
+.qcard{
+  width:100%;max-width:700px;margin:0 auto;
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:20px;padding:2.5rem 2rem;
+  animation:slide .3s ease;
+}
+.qdim{
+  font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--a1);margin-bottom:.8rem;font-weight:600;
+}
+.qtext{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(1rem,2.5vw,1.3rem);
+  font-weight:600;line-height:1.55;margin-bottom:1.75rem;color:#fff;
+}
+.qopts{display:flex;flex-direction:column;gap:.55rem;}
+.qopt{
+  background:var(--s2);border:1.5px solid var(--border);
+  border-radius:10px;padding:1rem 1.2rem;cursor:pointer;
+  font-size:.9rem;line-height:1.5;color:var(--muted2);
+  transition:border-color .18s,background .18s,color .18s,transform .15s;
+  display:flex;align-items:flex-start;gap:.9rem;
+}
+.qopt:hover{border-color:rgba(0,229,176,.3);background:rgba(0,229,176,.04);color:var(--text);transform:translateX(3px);}
+.qopt.sel{border-color:var(--a1);background:rgba(0,229,176,.07);color:var(--text);}
+.opt-key{
+  min-width:22px;height:22px;border-radius:4px;margin-top:1px;
+  background:var(--s3);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Syne',sans-serif;font-size:.65rem;font-weight:700;color:var(--muted);
+  transition:background .18s,color .18s,border-color .18s;flex-shrink:0;
+}
+.qopt.sel .opt-key{background:var(--a1);color:#07080d;border-color:var(--a1);}
+.qnav{display:flex;justify-content:space-between;align-items:center;margin-top:1.5rem;}
+.btn-ghost{
+  background:none;border:1px solid var(--border);color:var(--muted);
+  cursor:pointer;border-radius:6px;padding:.55rem 1.2rem;
+  font-family:'DM Sans',sans-serif;font-size:.85rem;
+  transition:color .2s,border-color .2s;
+}
+.btn-ghost:hover:not(:disabled){color:var(--text);border-color:var(--border2);}
+.btn-ghost:disabled{opacity:.25;cursor:not-allowed;}
+.btn-next{
+  background:var(--a1);color:#07080d;border:none;cursor:pointer;
+  border-radius:6px;padding:.55rem 1.5rem;
+  font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;
+  transition:opacity .2s,transform .2s;
+}
+.btn-next:hover:not(:disabled){opacity:.85;transform:translateY(-1px);}
+.btn-next:disabled{opacity:.25;cursor:not-allowed;}
+
+/* section divider in quiz */
+.section-banner{
+  width:100%;max-width:700px;margin:0 auto;
+  background:linear-gradient(135deg,rgba(0,229,176,.05),rgba(0,153,255,.05));
+  border:1px solid rgba(0,229,176,.15);border-radius:12px;
+  padding:1.5rem 2rem;text-align:center;
+  animation:up .4s ease both;
+}
+.section-banner h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:.4rem;}
+.section-banner p{font-size:.85rem;color:var(--muted2);}
+
+/* ─── RESULT ─── */
+#screen-result{padding:1.5rem 1rem 4rem;align-items:center;}
+.rwrap{width:100%;max-width:780px;margin:0 auto;}
+
+.rhero{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:20px;padding:2.5rem 2rem;margin-bottom:1rem;
+  position:relative;overflow:hidden;text-align:center;
+}
+.rhero::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(0,229,176,.1),transparent 60%);
+  pointer-events:none;
+}
+.rtype{
+  font-family:'Syne',sans-serif;
+  font-size:clamp(4rem,14vw,9rem);font-weight:800;
+  color:#fff;line-height:1;margin-bottom:.3rem;letter-spacing:-.03em;
+  animation:pop .5s cubic-bezier(.175,.885,.32,1.275) both;
+}
+.rname{
+  font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;
+  color:var(--a1);margin-bottom:.4rem;letter-spacing:.04em;text-transform:uppercase;
+}
+.rtagline{color:var(--muted2);font-size:.9rem;max-width:380px;margin:0 auto 2rem;line-height:1.6;}
+.rbars{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+@media(max-width:480px){.rbars{grid-template-columns:1fr;}}
+.rbar{background:var(--s2);border-radius:10px;padding:.85rem 1rem;}
+.rbar-head{display:flex;justify-content:space-between;font-size:.72rem;margin-bottom:.4rem;}
+.rbar-la{color:var(--a1);font-weight:600;}
+.rbar-lb{color:var(--muted);}
+.rbar-track{height:4px;background:rgba(255,255,255,.05);border-radius:999px;overflow:hidden;}
+.rbar-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--a1),var(--a2));transition:width 1.2s cubic-bezier(.4,0,.2,1) .2s;}
+.rbar-pct{font-size:.68rem;color:var(--muted);margin-top:.3rem;text-align:center;}
+
+/* IT Role card */
+.itrole-card{
+  background:var(--s1);border:1px solid rgba(0,153,255,.2);
+  border-radius:20px;padding:2rem;margin-bottom:1rem;
+  position:relative;overflow:hidden;
+}
+.itrole-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse 60% 50% at 0% 0%,rgba(0,153,255,.06),transparent 55%);
+  pointer-events:none;
+}
+.itrole-label{
+  font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--a2);font-weight:600;margin-bottom:.6rem;
+}
+.itrole-name{
+  font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;
+  color:#fff;margin-bottom:.4rem;
+}
+.itrole-tagline{color:var(--muted2);font-size:.88rem;margin-bottom:1.2rem;line-height:1.6;}
+.itrole-skills{display:flex;flex-wrap:wrap;gap:.4rem;}
+.skill-tag{
+  background:rgba(0,153,255,.08);border:1px solid rgba(0,153,255,.2);
+  border-radius:4px;padding:.28rem .7rem;font-size:.75rem;color:var(--a2);
+}
+
+/* sections */
+.rsec{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:16px;padding:1.5rem;margin-bottom:1rem;
+}
+.rsec-title{
+  font-family:'Syne',sans-serif;font-size:.72rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--muted);
+  margin-bottom:1rem;
+}
+.rdesc{font-size:.9rem;line-height:1.8;color:rgba(255,255,255,.75);}
+.sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;}
+@media(max-width:480px){.sw-grid{grid-template-columns:1fr;}}
+.sw-item{
+  border-radius:8px;padding:.65rem .9rem;
+  font-size:.82rem;display:flex;align-items:center;gap:.5rem;
+}
+.sw-item.s{background:rgba(0,229,176,.06);border:1px solid rgba(0,229,176,.15);color:var(--green);}
+.sw-item.w{background:rgba(255,94,107,.06);border:1px solid rgba(255,94,107,.12);color:var(--red);}
+.sw-dot{width:5px;height:5px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* compat */
+.cg{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:.5rem;}
+.ci{
+  border-radius:8px;padding:.65rem .8rem;text-align:center;
+  border:1px solid transparent;
+}
+.ci.best{background:rgba(0,229,176,.06);border-color:rgba(0,229,176,.18);color:var(--green);}
+.ci.good{background:rgba(0,153,255,.06);border-color:rgba(0,153,255,.18);color:var(--a2);}
+.ci.neutral{background:rgba(245,200,66,.06);border-color:rgba(245,200,66,.15);color:var(--yellow);}
+.ci.hard{background:rgba(255,94,107,.06);border-color:rgba(255,94,107,.12);color:var(--red);}
+.ci-type{font-family:'Syne',sans-serif;font-size:.82rem;font-weight:700;margin-bottom:.15rem;}
+.ci-lbl{font-size:.65rem;opacity:.65;}
+
+/* all types */
+.tg{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:.4rem;}
+.tp{
+  background:var(--s2);border:1px solid var(--border);border-radius:8px;
+  padding:.5rem;text-align:center;cursor:pointer;
+  transition:border-color .18s,background .18s;
+}
+.tp:hover,.tp.act{border-color:var(--a1);background:rgba(0,229,176,.06);}
+.tp-code{font-family:'Syne',sans-serif;font-size:.78rem;font-weight:700;color:var(--a1);}
+.tp-name{font-size:.6rem;color:var(--muted);margin-top:.15rem;}
+.type-detail{
+  display:none;background:rgba(0,229,176,.04);
+  border:1px solid rgba(0,229,176,.15);border-radius:12px;
+  padding:1.2rem;margin-top:.75rem;font-size:.86rem;line-height:1.75;
+  color:rgba(255,255,255,.75);
+}
+.type-detail.vis{display:block;animation:up .3s ease;}
+
+/* buttons */
+.btn-sec{
+  display:inline-flex;align-items:center;gap:.5rem;
+  background:none;border:1px solid var(--border);color:var(--muted);
+  cursor:pointer;border-radius:6px;padding:.65rem 1.5rem;
+  font-family:'DM Sans',sans-serif;font-size:.85rem;
+  transition:color .2s,border-color .2s;margin-top:1.2rem;
+  width:100%;justify-content:center;
+}
+.btn-sec:hover{color:var(--text);border-color:var(--border2);}
+.rfooter{
+  text-align:center;margin-top:2rem;
+  font-size:.73rem;color:rgba(255,255,255,.18);line-height:1.7;
+}
+.rfooter strong{color:rgba(255,255,255,.35);}
+
+/* ─── STATS ─── */
+#screen-stats{padding:1.5rem 1rem 4rem;align-items:center;}
+.swrap{width:100%;max-width:860px;margin:0 auto;}
+.stats-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:2rem;flex-wrap:wrap;gap:1rem;
+}
+.stats-header h2{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:#fff;}
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.75rem;margin-bottom:2rem;}
+.stat-card{
+  background:var(--s1);border:1px solid var(--border);border-radius:12px;
+  padding:1.1rem;text-align:center;
+}
+.stat-card .num{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--a1);}
+.stat-card .lbl{font-size:.72rem;color:var(--muted);margin-top:.2rem;letter-spacing:.05em;text-transform:uppercase;}
+.chart-sec{background:var(--s1);border:1px solid var(--border);border-radius:16px;padding:1.5rem;margin-bottom:1rem;}
+.chart-title{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:1.2rem;}
+.bar-chart{display:flex;flex-direction:column;gap:.6rem;}
+.bc-row{display:flex;align-items:center;gap:.75rem;}
+.bc-label{font-family:'Syne',sans-serif;font-size:.75rem;font-weight:700;color:var(--a1);min-width:48px;text-align:right;}
+.bc-track{flex:1;height:20px;background:var(--s2);border-radius:4px;overflow:hidden;}
+.bc-fill{height:100%;background:linear-gradient(90deg,var(--a1),var(--a2));border-radius:4px;transition:width .8s ease;}
+.bc-count{font-size:.72rem;color:var(--muted);min-width:32px;}
+.role-chart{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:.6rem;}
+.rc-item{
+  background:var(--s2);border:1px solid var(--border);border-radius:8px;
+  padding:.8rem;display:flex;align-items:center;justify-content:space-between;
+}
+.rc-name{font-size:.8rem;color:var(--text);}
+.rc-num{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--a2);}
+
+/* ─── PASSWORD GATE ─── */
+#screen-gate{
+  align-items:center;justify-content:center;
+  padding:2rem;text-align:center;
+}
+.gate-box{
+  background:var(--s1);border:1px solid var(--border);
+  border-radius:20px;padding:2.5rem;max-width:380px;width:100%;
+}
+.gate-box h2{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:#fff;margin-bottom:.5rem;}
+.gate-box p{font-size:.85rem;color:var(--muted2);margin-bottom:1.5rem;}
+.gate-input{
+  width:100%;background:var(--s2);border:1.5px solid var(--border2);
+  border-radius:8px;padding:.8rem 1rem;color:var(--text);
+  font-family:'DM Sans',sans-serif;font-size:.9rem;
+  outline:none;margin-bottom:.75rem;
+  transition:border-color .2s;
+}
+.gate-input:focus{border-color:var(--a1);}
+.gate-err{font-size:.78rem;color:var(--red);margin-bottom:.75rem;display:none;}
+
+/* ANIMATIONS */
+@keyframes up{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+@keyframes slide{from{opacity:0;transform:translateX(24px);}to{opacity:1;transform:translateX(0);}}
+@keyframes pop{from{opacity:0;transform:scale(.55);}to{opacity:1;transform:scale(1);}}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:.3;}}
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="screen-intro" class="screen active">
+  <div class="intro-eyebrow"><span class="dot"></span>НГУ · Факультет ИТ · 2026</div>
+  <div class="intro-title">MBTI <span>x IT</span></div>
+  <p class="intro-subtitle">Личностный опросник для IT-специалистов. Узнай свой тип и профессиональный профиль.</p>
+  <p class="intro-authors">Авторы: <strong>Денисов С. · Кирильчик Д. · Иванков П. · Базаров Б.</strong></p>
+  <div class="intro-pills">
+    <div class="pill">48 вопросов</div>
+    <div class="pill">16 типов личности</div>
+    <div class="pill">9 IT-профилей</div>
+    <div class="pill">Совместимость</div>
+    <div class="pill">Статистика</div>
+  </div>
+  <button class="btn-primary" onclick="startQuiz()">Начать тест</button>
+  <p class="intro-note">~8 минут · нет правильных или неправильных ответов</p>
+  <p style="margin-top:2rem;font-size:.72rem;color:var(--muted);">
+    <span style="cursor:pointer;text-decoration:underline;text-underline-offset:3px;" onclick="show('gate')">Статистика для создателей</span>
+  </p>
+</div>
+
+<!-- PASSWORD GATE -->
+<div id="screen-gate" class="screen">
+  <div class="gate-box">
+    <h2>Статистика</h2>
+    <p>Только для создателей теста. Введите код доступа.</p>
+    <input class="gate-input" type="password" id="gate-pw" placeholder="Код доступа" onkeydown="if(event.key==='Enter')checkPw()"/>
+    <div class="gate-err" id="gate-err">Неверный код</div>
+    <button class="btn-primary" style="width:100%;justify-content:center;" onclick="checkPw()">Войти</button>
+    <br><br>
+    <span style="font-size:.78rem;color:var(--muted);cursor:pointer;text-underline-offset:3px;text-decoration:underline;" onclick="show('intro')">Назад</span>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="qheader">
+    <div class="qlogo">MBTI x IT</div>
+    <div class="qprog">
+      <div class="qprog-top">
+        <span id="q-num">1 / 48</span>
+        <span id="q-pct">0%</span>
+      </div>
+      <div class="qtrack"><div class="qfill" id="qfill" style="width:0%"></div></div>
+      <div class="qphase" id="qphase">Часть 1 — Тип личности</div>
+    </div>
+  </div>
+  <div class="qcard" id="qcard">
+    <div class="qdim" id="q-dim"></div>
+    <div class="qtext" id="q-text"></div>
+    <div class="qopts" id="q-opts"></div>
+    <div class="qnav">
+      <button class="btn-ghost" id="btn-prev" onclick="prevQ()" disabled>Назад</button>
+      <button class="btn-next" id="btn-next" onclick="nextQ()" disabled>Далее</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div id="screen-result" class="screen">
+  <div class="rwrap">
+    <div class="rhero">
+      <div class="rtype" id="res-type"></div>
+      <div class="rname" id="res-name"></div>
+      <div class="rtagline" id="res-tagline"></div>
+      <div class="rbars" id="res-bars"></div>
+    </div>
+
+    <div class="itrole-card">
+      <div class="itrole-label">Твой IT-профиль</div>
+      <div class="itrole-name" id="role-name"></div>
+      <div class="itrole-tagline" id="role-tagline"></div>
+      <div class="itrole-skills" id="role-skills"></div>
+    </div>
+
+    <div class="rsec">
+      <div class="rsec-title">Описание типа</div>
+      <div class="rdesc" id="res-desc"></div>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title">Сильные стороны</div>
+      <div class="sw-grid" id="res-str"></div>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title">Зоны роста</div>
+      <div class="sw-grid" id="res-weak"></div>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title">Совместимость с другими типами</div>
+      <div class="cg" id="res-compat"></div>
+    </div>
+    <div class="rsec">
+      <div class="rsec-title">Все 16 типов</div>
+      <p style="font-size:.78rem;color:var(--muted);margin-bottom:.9rem;">Нажми на тип, чтобы узнать о нём</p>
+      <div class="tg" id="all-types"></div>
+      <div class="type-detail" id="type-detail"></div>
+    </div>
+
+    <button class="btn-sec" onclick="retake()">Пройти заново</button>
+    <button class="btn-sec" style="margin-top:.5rem;" onclick="show('intro')">На главную</button>
+
+    <div class="rfooter">
+      Создано студентами ФИТ НГУ:<br>
+      <strong>Денисов Семён · Кирильчик Данил · Иванков Павел · Базаров Булат</strong><br><br>
+      Опросник создан в учебных целях на основе типологии Myers–Briggs.
+    </div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div id="screen-stats" class="screen">
+  <div class="swrap">
+    <div class="stats-header">
+      <h2>Статистика прохождений</h2>
+      <button class="btn-ghost" onclick="show('intro')">На главную</button>
+    </div>
+    <div class="stat-cards" id="stat-cards"></div>
+    <div class="chart-sec">
+      <div class="chart-title">Распределение MBTI-типов</div>
+      <div class="bar-chart" id="type-chart"></div>
+    </div>
+    <div class="chart-sec">
+      <div class="chart-title">Распределение IT-профилей</div>
+      <div class="role-chart" id="role-chart"></div>
+    </div>
+    <div class="chart-sec">
+      <div class="chart-title">Сырые результаты (последние 50)</div>
+      <div id="raw-table" style="font-size:.78rem;color:var(--muted2);overflow-x:auto;"></div>
+    </div>
+    <button class="btn-sec" onclick="exportStats()">Открыть Google Sheets</button>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════
+//  CONFIG — вставьте свой URL после
+//  настройки Google Apps Script
+// ═══════════════════════════════════
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbyDb1dSBzj4jFfl4B25MRM-ELV2QpGBhwtWeOPvys0GYNF_FB06RlmXuGt8Alu9huDj/exec';
+const PASS = 'fit2026';
+
+// Отправляет одну строку результата в Google Sheets
+async function saveResult(entry){
+  if(GAS_URL === 'https://script.google.com/macros/s/AKfycbyDb1dSBzj4jFfl4B25MRM-ELV2QpGBhwtWeOPvys0GYNF_FB06RlmXuGt8Alu9huDj/exec'){
+    console.warn('Google Apps Script URL не настроен — результат не сохранён.');
+    return;
+  }
+  try{
+    await fetch(GAS_URL, {
+      method:'POST',
+      mode:'no-cors', // GAS не поддерживает CORS preflight — no-cors обязателен
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(entry),
+    });
+  }catch(e){
+    console.warn('Ошибка отправки в Sheets:', e);
+  }
+}
+
+// Загружает все строки из Google Sheets для страницы статистики
+async function loadStats(){
+  if(GAS_URL === 'https://script.google.com/macros/s/AKfycbyDb1dSBzj4jFfl4B25MRM-ELV2QpGBhwtWeOPvys0GYNF_FB06RlmXuGt8Alu9huDj/exec') return [];
+  try{
+    const url = GAS_URL + '?action=read';
+    const r = await fetch(url);
+    const data = await r.json();
+    return Array.isArray(data) ? data : [];
+  }catch(e){
+    console.warn('Ошибка загрузки статистики:', e);
+    return [];
+  }
+}
+
+function checkPw(){
+  const v = document.getElementById('gate-pw').value;
+  const err = document.getElementById('gate-err');
+  if(v === PASS){
+    err.style.display='none';
+    show('stats');
+    renderStats();
+  } else {
+    err.style.display='block';
+  }
+}
+
+async function renderStats(){
+  // Показываем лоадер
+  document.getElementById('stat-cards').innerHTML =
+    '<div style="color:var(--muted);font-size:.85rem;grid-column:1/-1;">Загрузка данных...</div>';
+
+  const all = await loadStats();
+
+  const types = {};
+  const roles = {};
+  all.forEach(e=>{
+    types[e.type] = (types[e.type]||0) + 1;
+    roles[e.role] = (roles[e.role]||0) + 1;
+  });
+
+  const topType = Object.entries(types).sort((a,b)=>b[1]-a[1])[0];
+  const topRole = Object.entries(roles).sort((a,b)=>b[1]-a[1])[0];
+
+  document.getElementById('stat-cards').innerHTML = `
+    <div class="stat-card"><div class="num">${all.length}</div><div class="lbl">Всего прохождений</div></div>
+    <div class="stat-card"><div class="num">${Object.keys(types).length}</div><div class="lbl">Уникальных типов</div></div>
+    <div class="stat-card"><div class="num">${topType ? topType[0] : '—'}</div><div class="lbl">Самый частый тип</div></div>
+    <div class="stat-card"><div class="num">${topRole ? topRole[0].split(' ')[0] : '—'}</div><div class="lbl">Топ IT-роль</div></div>
+  `;
+
+  const ORDER = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+  const maxT = Math.max(...Object.values(types), 1);
+  document.getElementById('type-chart').innerHTML = ORDER.map(t=>`
+    <div class="bc-row">
+      <div class="bc-label">${t}</div>
+      <div class="bc-track"><div class="bc-fill" style="width:${((types[t]||0)/maxT*100).toFixed(1)}%"></div></div>
+      <div class="bc-count">${types[t]||0}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('role-chart').innerHTML =
+    Object.entries(roles).sort((a,b)=>b[1]-a[1]).map(([r,n])=>`
+      <div class="rc-item"><div class="rc-name">${r}</div><div class="rc-num">${n}</div></div>
+    `).join('') || '<div style="color:var(--muted);font-size:.85rem;">Нет данных</div>';
+
+  const recent = [...all].reverse().slice(0,50);
+  if(recent.length === 0){
+    document.getElementById('raw-table').innerHTML = '<div style="color:var(--muted);">Нет данных</div>';
+    return;
+  }
+  document.getElementById('raw-table').innerHTML = `
+    <table style="border-collapse:collapse;width:100%;min-width:500px;">
+      <tr style="color:var(--muted);border-bottom:1px solid var(--border);">
+        <td style="padding:.4rem .6rem;">#</td>
+        <td style="padding:.4rem .6rem;">Тип</td>
+        <td style="padding:.4rem .6rem;">IT-роль</td>
+        <td style="padding:.4rem .6rem;">E/I</td>
+        <td style="padding:.4rem .6rem;">S/N</td>
+        <td style="padding:.4rem .6rem;">T/F</td>
+        <td style="padding:.4rem .6rem;">J/P</td>
+        <td style="padding:.4rem .6rem;">Дата</td>
+      </tr>
+      ${recent.map((e,i)=>`
+        <tr style="border-bottom:1px solid var(--border);">
+          <td style="padding:.4rem .6rem;color:var(--muted);">${all.length - i}</td>
+          <td style="padding:.4rem .6rem;font-family:'Syne',sans-serif;color:var(--a1);font-weight:700;">${e.type||'—'}</td>
+          <td style="padding:.4rem .6rem;">${e.role||'—'}</td>
+          <td style="padding:.4rem .6rem;">${e.scores ? e.scores.E+'E/'+e.scores.I+'I' : '—'}</td>
+          <td style="padding:.4rem .6rem;">${e.scores ? e.scores.S+'S/'+e.scores.N+'N' : '—'}</td>
+          <td style="padding:.4rem .6rem;">${e.scores ? e.scores.T+'T/'+e.scores.F+'F' : '—'}</td>
+          <td style="padding:.4rem .6rem;">${e.scores ? e.scores.J+'J/'+e.scores.P+'P' : '—'}</td>
+          <td style="padding:.4rem .6rem;color:var(--muted);">${e.date||'—'}</td>
+        </tr>
+      `).join('')}
+    </table>`;
+}
+
+function exportStats(){
+  // Открываем Google Sheets напрямую — удобнее чем JSON
+  if(GAS_URL === 'https://script.google.com/macros/s/AKfycbyDb1dSBzj4jFfl4B25MRM-ELV2QpGBhwtWeOPvys0GYNF_FB06RlmXuGt8Alu9huDj/exec'){
+    alert('Настройте Google Apps Script URL сначала.');
+    return;
+  }
+  window.open('https://docs.google.com/spreadsheets', '_blank');
+}
+
+// ═══════════════════════════════════
+//  QUESTIONS
+//  Part 1 (0-39): MBTI — 10 per dim
+//  Part 2 (40-47): IT Role — 8 questions
+// ═══════════════════════════════════
+const DIMS = {
+  EI:{a:'E',b:'I',la:'Экстраверсия',lb:'Интроверсия'},
+  SN:{a:'S',b:'N',la:'Сенсорика',lb:'Интуиция'},
+  TF:{a:'T',b:'F',la:'Логика',lb:'Этика'},
+  JP:{a:'J',b:'P',la:'Решение',lb:'Восприятие'},
+};
+
+const Q_MBTI = [
+  // E/I
+  {dim:'EI',label:'Энергия',text:'На хакатоне ты скорее...',
+    a:'Берёшь на себя роль координатора — общаешься с другими командами, подбадриваешь свою',
+    b:'Уходишь в зону и пишешь код — общение минимизируешь, в поток заходишь лучше в тишине'},
+  {dim:'EI',label:'Энергия',text:'После насыщенного дня на конференции с докладами и нетворкингом ты чувствуешь...',
+    a:'Заряженность — столько интересных людей и идей!',
+    b:'Усталость — нужно время, чтобы переработать всё наедине с собой'},
+  {dim:'EI',label:'Энергия',text:'Как ты предпочитаешь решать сложную алгоритмическую задачу?',
+    a:'Обсуждать вслух с коллегой — в диалоге мысли структурируются быстрее',
+    b:'Думать в тишине, строить модель в голове, потом выдать решение'},
+  {dim:'EI',label:'Энергия',text:'На стендапе ты скорее...',
+    a:'Говоришь развёрнуто, делишься деталями и мыслями',
+    b:'Отвечаешь по существу, кратко — только статус и блокеры'},
+  {dim:'EI',label:'Энергия',text:'Когда в команде возникает разногласие, ты...',
+    a:'Инициируешь обсуждение сразу — лучше разобраться здесь и сейчас',
+    b:'Сначала обдумываешь позицию про себя, потом высказываешься взвешенно'},
+  {dim:'EI',label:'Энергия',text:'Твоя идеальная рабочая среда...',
+    a:'Open space с коллегами рядом — можно быстро переспросить и обсудить',
+    b:'Личное пространство или наушники — максимальный фокус, минимум прерываний'},
+  {dim:'EI',label:'Энергия',text:'На code review ты...',
+    a:'Предпочитаешь обсудить вживую или в звонке — так быстрее',
+    b:'Пишешь развёрнутые комментарии в PR — удобнее думать асинхронно'},
+  {dim:'EI',label:'Энергия',text:'В новой команде ты...',
+    a:'Быстро знакомишься со всеми, узнаёшь кто чем занимается',
+    b:'Сначала наблюдаешь, знакомишься постепенно, предпочитаешь 1-on-1'},
+  {dim:'EI',label:'Энергия',text:'Тебе комфортнее выступать...',
+    a:'На большой аудитории — больше людей, больше энергии',
+    b:'На маленьком митинге или 1-on-1 — диалог важнее монолога'},
+  {dim:'EI',label:'Энергия',text:'Когда проект горит и нужно срочно что-то решить, ты...',
+    a:'Собираешь всех в канал или звонок — вместе быстрее',
+    b:'Закрываешься и сам разбираешься — параллельные разговоры мешают'},
+
+  // S/N
+  {dim:'SN',label:'Восприятие',text:'Получив новую задачу, ты в первую очередь...',
+    a:'Уточняешь конкретные требования, acceptance criteria, крайний срок',
+    b:'Думаешь о том, как задача вписывается в архитектуру и какой подход выбрать'},
+  {dim:'SN',label:'Восприятие',text:'В техническом споре ты сильнее апеллируешь к...',
+    a:'Бенчмаркам, реальным метрикам, проверенным практикам',
+    b:'Теоретической элегантности, долгосрочной масштабируемости, новым подходам'},
+  {dim:'SN',label:'Восприятие',text:'Что тебе ближе при выборе технологии?',
+    a:'Зрелость, документация, community — предпочту проверенное',
+    b:'Интересная идея или подход — готов исследовать что-то новое'},
+  {dim:'SN',label:'Восприятие',text:'Читая чужой код, ты...',
+    a:'Внимательно разбираешь каждую строку, смотришь детали реализации',
+    b:'Смотришь на архитектуру в целом, понимаешь паттерн, детали — потом'},
+  {dim:'SN',label:'Восприятие',text:'Техническое задание без чёткой спецификации для тебя — это...',
+    a:'Источник тревоги — нужно выяснить все неопределённости до начала',
+    b:'Нормально — сделаю MVP, остальное уточним итеративно'},
+  {dim:'SN',label:'Восприятие',text:'Ты лучше запоминаешь...',
+    a:'Конкретные API, синтаксис, флаги — практические детали',
+    b:'Принципы и концепции — зная подход, детали найду в доке'},
+  {dim:'SN',label:'Восприятие',text:'В архитектурных обсуждениях тебе важнее...',
+    a:'Что именно будет реализовано в ближайшем спринте',
+    b:'Как система будет выглядеть через год, какой задел заложить'},
+  {dim:'SN',label:'Восприятие',text:'Изучая новый язык/фреймворк, ты...',
+    a:'Идёшь по туториалу шаг за шагом, потом переходишь к практике',
+    b:'Сразу начинаешь писать что-то своё, документацию смотришь по необходимости'},
+  {dim:'SN',label:'Восприятие',text:'Для тебя "хороший код" — это прежде всего...',
+    a:'Понятный, предсказуемый, хорошо покрытый тестами',
+    b:'Элегантный, с правильными абстракциями, расширяемый'},
+  {dim:'SN',label:'Восприятие',text:'Когда ты объясняешь техническую идею, ты...',
+    a:'Начинаешь с конкретных примеров и кода, потом — общий вывод',
+    b:'Начинаешь с концепции и принципа, потом показываешь как это работает'},
+
+  // T/F
+  {dim:'TF',label:'Принятие решений',text:'Коллега предложил решение, которое технически неверно. Ты...',
+    a:'Скажешь прямо, что решение не работает и почему, предложишь лучшее',
+    b:'Найдёшь способ указать на проблему так, чтобы не поставить коллегу в неловкое положение'},
+  {dim:'TF',label:'Принятие решений',text:'Команда голосует за подход, который ты считаешь технически слабым. Ты...',
+    a:'Обосновываешь свою позицию до конца — правильное решение важнее консенсуса',
+    b:'Озвучиваешь опасения, но если команда решила — готов принять и сделать лучшее в рамках'},
+  {dim:'TF',label:'Принятие решений',text:'При код-ревью ты считаешь, что главная цель — это...',
+    a:'Найти все баги и проблемы до мерджа, даже если комментариев много',
+    b:'Помочь автору вырасти, давать конструктив — результат важен, но и процесс тоже'},
+  {dim:'TF',label:'Принятие решений',text:'Тимлид просит тебя оценить работу джуна. Твой подход...',
+    a:'Чёткая оценка по объективным критериям — что хорошо, что плохо, что улучшить',
+    b:'Учитываю, что человек только начинает, больше фокусируюсь на мотивации и прогрессе'},
+  {dim:'TF',label:'Принятие решений',text:'В спорных ситуациях ты руководствуешься прежде всего...',
+    a:'Логикой и данными — эмоции не должны влиять на технические решения',
+    b:'Тем, как решение повлияет на людей — команду, пользователей, стейкхолдеров'},
+  {dim:'TF',label:'Принятие решений',text:'Когда проект проваливается, ты сначала...',
+    a:'Анализируешь, где именно была допущена ошибка и как её не повторить',
+    b:'Убеждаешься, что у команды нормально с моральным состоянием, потом к анализу'},
+  {dim:'TF',label:'Принятие решений',text:'Что тебе важнее в техническом решении?',
+    a:'Корректность и оптимальность — решение должно быть лучшим из возможных',
+    b:'Принятие командой — решение, которое все понимают и поддерживают, часто лучше'},
+  {dim:'TF',label:'Принятие решений',text:'Тебя больше задевает критика в твой адрес о том, что ты...',
+    a:'Некомпетентен или сделал что-то неправильно',
+    b:'Груб или невнимателен к людям'},
+  {dim:'TF',label:'Принятие решений',text:'Ты выбираешь между двумя кандидатами на позицию. Один технически сильнее, другой лучше вписывается в команду. Ты...',
+    a:'Берёшь технически сильного — скиллы важнее, soft skills можно прокачать',
+    b:'Думаешь о балансе — сильная команда важнее одного топ-перформера'},
+  {dim:'TF',label:'Принятие решений',text:'Когда ты учишь кого-то, твой стиль скорее...',
+    a:'Структурированный — объясняю принципы, корректирую ошибки чётко',
+    b:'Поддерживающий — слежу за тем, чтобы человек не терял уверенность в процессе'},
+
+  // J/P
+  {dim:'JP',label:'Организация',text:'Как ты работаешь с задачами в Jira/Notion?',
+    a:'Веду все задачи аккуратно, обновляю статусы, у меня чёткий список на день',
+    b:'Могу запустить трекер, но работаю скорее по памяти и приоритетам в голове'},
+  {dim:'JP',label:'Организация',text:'Дедлайн через три дня. Ты...',
+    a:'Уже почти готов — я планировал так, чтобы сдать заранее',
+    b:'Сяду активно сегодня-завтра — давление дедлайна мобилизует'},
+  {dim:'JP',label:'Организация',text:'Незакрытый PR или незавершённая ветка тебя...',
+    a:'Раздражают — незакрытые дела создают ментальный шум',
+    b:'Не особо беспокоят — вернусь когда будет время или снова станет актуальным'},
+  {dim:'JP',label:'Организация',text:'Как ты относишься к внезапной смене приоритетов на проекте?',
+    a:'Нервирует — хочется довести текущее до конца, потом менять',
+    b:'Нормально — адаптироваться к реальности это часть работы'},
+  {dim:'JP',label:'Организация',text:'Твой рабочий стол (физический или рабочий стол ОС)...',
+    a:'Организован — у каждого файла и окна есть место',
+    b:'Хаотичен по виду, но я знаю где что — своя система'},
+  {dim:'JP',label:'Организация',text:'В проекте ты предпочитаешь...',
+    a:'Чёткую архитектуру и план с самого начала — изменения вносить дороже',
+    b:'Начать быстро, итеративно уточнять — overengineering хуже чем быстрый старт'},
+  {dim:'JP',label:'Организация',text:'Когда тебе нужно принять решение по технологии или подходу, ты...',
+    a:'Исследуешь, сравниваешь варианты и фиксируешь выбор — определённость важна',
+    b:'Откладываешь выбор до последнего — вдруг появится новая информация'},
+  {dim:'JP',label:'Организация',text:'Ты работаешь над фичей, и приходит просьба добавить что-то ещё "по-быстрому". Ты...',
+    a:'Оцениваешь impact на текущий план, скорее откажешь или перенесёшь',
+    b:'Смотришь что там — если небольшое, можно добавить по ходу'},
+  {dim:'JP',label:'Организация',text:'Как ты описал(а) бы свой стиль планирования?',
+    a:'Люблю расписания, структуру, чеклисты — порядок снижает когнитивную нагрузку',
+    b:'Планирую в общих чертах, детали решаются по ситуации'},
+  {dim:'JP',label:'Организация',text:'Завершив большой релиз, ты...',
+    a:'Чувствуешь облегчение — наконец-то закрытый гештальт',
+    b:'Уже думаешь о следующем — закрытие само по себе не так важно'},
+];
+
+// IT Role questions (8) — scores map to role dimensions
+// Dimensions: Solo vs Team, Deep vs Broad, Build vs Analyze, Lead vs Execute
+const Q_IT = [
+  {label:'IT-профиль',text:'Что тебя мотивирует больше?',
+    opts:[
+      {text:'Решить конкретную инженерную проблему изящным кодом',dims:{Solo:1,Deep:1,Build:1,Execute:1}},
+      {text:'Координировать команду и видеть как люди растут',dims:{Team:1,Broad:1,Analyze:1,Lead:1}},
+      {text:'Разобраться в данных и найти неочевидный паттерн',dims:{Solo:1,Deep:1,Analyze:1,Execute:1}},
+      {text:'Запустить продукт и наблюдать как им пользуются реальные люди',dims:{Team:1,Broad:1,Build:1,Lead:1}},
+    ]},
+  {label:'IT-профиль',text:'Как ты относишься к документации?',
+    opts:[
+      {text:'Пишу подробно — будущий я скажет спасибо',dims:{Solo:1,Deep:1,Build:1,Execute:1}},
+      {text:'Стараюсь, но если код понятен — документация лишняя',dims:{Solo:1,Deep:1,Build:1,Execute:1}},
+      {text:'Люблю писать концептуальные доки и RFC',dims:{Team:1,Broad:1,Analyze:1,Lead:1}},
+      {text:'Документацию важно делать для команды и стейкхолдеров',dims:{Team:1,Broad:1,Analyze:1,Lead:1}},
+    ]},
+  {label:'IT-профиль',text:'Что из этого тебе ближе в работе?',
+    opts:[
+      {text:'Уходить глубоко в одну технологию и становиться экспертом',dims:{Solo:1,Deep:1,Build:1,Execute:1}},
+      {text:'Понимать широкий стек и связывать разные системы',dims:{Team:1,Broad:1,Build:1,Lead:1}},
+      {text:'Проводить исследования, читать статьи, строить гипотезы',dims:{Solo:1,Deep:1,Analyze:1,Execute:1}},
+      {text:'Выстраивать процессы и помогать команде работать эффективно',dims:{Team:1,Broad:1,Analyze:1,Lead:1}},
+    ]},
+  {label:'IT-профиль',text:'Идеальный рабочий день выглядит так:',
+    opts:[
+      {text:'4-6 часов глубокого кодинга, минимум встреч',dims:{Solo:2,Deep:1,Build:2,Execute:1}},
+      {text:'Несколько встреч с командой, обсуждения, принятие решений',dims:{Team:2,Broad:1,Analyze:1,Lead:2}},
+      {text:'Работа с данными: запросы, модели, визуализации',dims:{Solo:1,Deep:2,Analyze:2,Execute:1}},
+      {text:'Смесь: немного кода, немного общения, немного стратегии',dims:{Team:1,Broad:2,Build:1,Lead:1}},
+    ]},
+  {label:'IT-профиль',text:'Какая задача даётся тебе легче всего?',
+    opts:[
+      {text:'Написать сложный алгоритм или оптимизировать узкое место',dims:{Solo:1,Deep:2,Build:1,Execute:2}},
+      {text:'Провести технический ревью и дать развёрнутый фидбек',dims:{Team:1,Deep:1,Analyze:1,Lead:1}},
+      {text:'Настроить CI/CD pipeline или автоматизировать процесс',dims:{Solo:1,Broad:1,Build:1,Execute:1}},
+      {text:'Провести встречу и вывести команду к решению',dims:{Team:2,Broad:1,Analyze:1,Lead:2}},
+    ]},
+  {label:'IT-профиль',text:'Когда что-то сломалось в продакшене, ты...',
+    opts:[
+      {text:'Первым лезешь в логи и начинаешь дебажить',dims:{Solo:1,Deep:1,Build:1,Execute:2}},
+      {text:'Координируешь команду: кто что смотрит, кто на связи',dims:{Team:2,Broad:1,Analyze:1,Lead:2}},
+      {text:'Анализируешь метрики чтобы понять масштаб и локализацию',dims:{Solo:1,Deep:2,Analyze:2,Execute:1}},
+      {text:'Строишь временный фикс пока команда ищет root cause',dims:{Team:1,Broad:1,Build:2,Execute:1}},
+    ]},
+  {label:'IT-профиль',text:'Что тебе важнее на работе?',
+    opts:[
+      {text:'Технические вызовы и рост как инженера',dims:{Solo:1,Deep:1,Build:1,Execute:1}},
+      {text:'Влияние — видеть что твоя работа меняет продукт или команду',dims:{Team:1,Broad:1,Analyze:1,Lead:1}},
+      {text:'Глубина — разобраться в предметной области по-настоящему',dims:{Solo:1,Deep:2,Analyze:1,Execute:1}},
+      {text:'Люди — строить хорошую команду и культуру',dims:{Team:2,Broad:1,Analyze:1,Lead:1}},
+    ]},
+  {label:'IT-профиль',text:'Твой идеальный проект — это...',
+    opts:[
+      {text:'Высоконагруженный backend, интересные инженерные задачи',dims:{Solo:1,Deep:2,Build:2,Execute:1}},
+      {text:'Продуктовая команда, влияние на UX, метрики роста',dims:{Team:1,Broad:2,Build:1,Lead:1}},
+      {text:'ML/Data pipeline, интересные данные, исследовательская часть',dims:{Solo:2,Deep:2,Analyze:2,Execute:1}},
+      {text:'Платформенная инфраструктура — чтобы другие могли строить на ней',dims:{Team:1,Broad:1,Build:1,Lead:1}},
+    ]},
+];
+
+// Flatten all questions
+const ALL_Q = [...Q_MBTI, ...Q_IT];
+const MBTI_LEN = Q_MBTI.length; // 40
+const TOTAL_Q = ALL_Q.length;   // 48
+
+// ═══════════════════════════════════
+//  IT ROLES
+// ═══════════════════════════════════
+const IT_ROLES = [
+  {
+    id:'backend',name:'Backend-разработчик',
+    tagline:'Строишь надёжный фундамент — серверную логику, API, базы данных.',
+    skills:['Python / Go / Java','REST / gRPC','Базы данных','Highload','Микросервисы'],
+    match:{Solo:true,Deep:true,Build:true,Execute:true},
+    weight:{Solo:2,Deep:2,Build:3,Execute:1,Team:0,Broad:0,Analyze:0,Lead:0},
+  },
+  {
+    id:'devops',name:'DevOps / SRE',
+    tagline:'Соединяешь разработку и эксплуатацию — автоматизация, надёжность, масштабирование.',
+    skills:['Docker / Kubernetes','CI/CD','Linux','Monitoring','Infrastructure as Code'],
+    match:{Broad:true,Build:true,Execute:true},
+    weight:{Solo:1,Deep:1,Build:2,Execute:2,Team:1,Broad:2,Analyze:1,Lead:0},
+  },
+  {
+    id:'ml',name:'Data Scientist / ML-инженер',
+    tagline:'Извлекаешь ценность из данных — от аналитики до нейросетей.',
+    skills:['Python / R','Machine Learning','Statistics','PyTorch / TF','SQL / Spark'],
+    match:{Solo:true,Deep:true,Analyze:true},
+    weight:{Solo:2,Deep:3,Build:1,Execute:1,Team:0,Broad:0,Analyze:3,Lead:0},
+  },
+  {
+    id:'pm',name:'Product Manager / Team Lead',
+    tagline:'Видишь продукт целиком — от стратегии до приоритетов спринта.',
+    skills:['Product Thinking','Agile / Scrum','Communication','Data Analysis','Roadmapping'],
+    match:{Team:true,Broad:true,Lead:true},
+    weight:{Solo:0,Deep:0,Build:1,Execute:0,Team:3,Broad:2,Analyze:1,Lead:3},
+  },
+  {
+    id:'qa',name:'QA / Инженер по надёжности',
+    tagline:'Держишь планку качества — тестируешь, автоматизируешь, находишь краевые случаи.',
+    skills:['Test Automation','Python / JS','CI Integration','Bug Tracking','Performance Testing'],
+    match:{Deep:true,Analyze:true,Execute:true},
+    weight:{Solo:1,Deep:2,Build:1,Execute:2,Team:0,Broad:1,Analyze:2,Lead:0},
+  },
+  {
+    id:'researcher',name:'Исследователь / CS-учёный',
+    tagline:'Раздвигаешь границы знаний — алгоритмы, теория, новые подходы.',
+    skills:['Алгоритмы','Математика','LaTeX / Публикации','Эксперименты','Python / C++'],
+    match:{Solo:true,Deep:true,Analyze:true},
+    weight:{Solo:3,Deep:3,Build:0,Execute:1,Team:0,Broad:0,Analyze:3,Lead:0},
+  },
+  {
+    id:'startup',name:'Стартапер / CTO',
+    tagline:'Строишь с нуля — от идеи до продукта, от команды до архитектуры.',
+    skills:['Full-stack мышление','Принятие решений','Набор команды','MVP','Fundraising'],
+    match:{Team:true,Broad:true,Build:true,Lead:true},
+    weight:{Solo:0,Deep:1,Build:2,Execute:0,Team:2,Broad:2,Analyze:1,Lead:3},
+  },
+  {
+    id:'security',name:'Специалист по безопасности',
+    tagline:'Думаешь как атакующий, защищаешь как параноик — находишь уязвимости до других.',
+    skills:['Penetration Testing','Cryptography','Network Security','OSINT','Reverse Engineering'],
+    match:{Solo:true,Deep:true,Analyze:true,Execute:true},
+    weight:{Solo:2,Deep:3,Build:0,Execute:2,Team:0,Broad:0,Analyze:2,Lead:0},
+  },
+  {
+    id:'dataeng',name:'Data Engineer',
+    tagline:'Строишь надёжные трубопроводы данных — от сырых источников до аналитики и ML.',
+    skills:['SQL / dbt','Apache Spark / Flink','Airflow / Prefect','Data Warehousing','Python / Scala'],
+    match:{Solo:true,Deep:true,Build:true,Analyze:true},
+    weight:{Solo:1,Deep:2,Build:3,Execute:2,Team:0,Broad:1,Analyze:2,Lead:0},
+  },
+];
+
+function calcITRole(roleDims){
+  let best=null,bestScore=-1;
+  IT_ROLES.forEach(r=>{
+    let score=0;
+    Object.entries(r.weight).forEach(([k,w])=>{score+=(roleDims[k]||0)*w;});
+    if(score>bestScore){bestScore=score;best=r;}
+  });
+  return best;
+}
+
+// ═══════════════════════════════════
+//  MBTI TYPE DATA
+// ═══════════════════════════════════
+const TYPES = {
+  INTJ:{name:'Архитектор',tagline:'Стратег с железной волей и системным мышлением',
+    desc:'INTJ — независимые стратеги, которые видят закономерности там, где другие видят хаос. Они ставят амбициозные цели и последовательно их достигают, не нуждаясь во внешней валидации. В IT-среде INTJ часто становятся архитекторами систем, техническими директорами или исследователями — теми, кто строит долгосрочное видение и воплощает его в жизнь. Они не терпят неэффективности и готовы жёстко отстаивать технически верное решение.',
+    strengths:['Стратегическое мышление','Высокая целеустремлённость','Системный подход','Независимость суждений'],
+    weaknesses:['Высокомерие в экспертных вопросах','Трудности с делегированием','Перфекционизм','Закрытость в коммуникации'],
+    compat:{best:['ENFP','ENTP'],good:['INFJ','ENTJ','INTP'],neutral:['ISFJ','ESTJ'],hard:['ESFP','ESFJ','ISFP']}},
+  INTP:{name:'Логик',tagline:'Теоретик и охотник за истиной в любой системе',
+    desc:'INTP живут в мире идей и моделей. Они разбирают системы на части, находят противоречия и строят новые концепции. Правила интересуют их меньше, чем принципы — они хотят понять, почему так, а не просто как. В IT они часто тяготеют к исследованиям, алгоритмам, компиляторам, ML-теории — туда, где глубина мышления ценится выше социальной активности.',
+    strengths:['Аналитический ум','Оригинальность идей','Объективность','Концептуальная глубина'],
+    weaknesses:['Прокрастинация на этапе реализации','Трудности с рутиной','Замкнутость','Незавершённые проекты'],
+    compat:{best:['ENTJ','ENFJ'],good:['INTJ','INFJ','ENTP'],neutral:['ISTP','INFP'],hard:['ESFJ','ISFJ','ESTJ']}},
+  ENTJ:{name:'Командир',tagline:'Прирождённый лидер, ведущий людей к результату',
+    desc:'ENTJ берут на себя ответственность естественно. Им нравится строить системы, управлять ресурсами и двигать команды к амбициозным целям. Они видят неэффективность за версту и не стесняются её устранять. В IT они часто занимают позиции CTO, Engineering Manager или основателей технологических компаний — там где нужны решения и скорость.',
+    strengths:['Лидерство','Стратегическое планирование','Уверенность','Решительность'],
+    weaknesses:['Нетерпимость к медленным','Жёсткость в конфликтах','Игнорирование эмоций','Трудоголизм'],
+    compat:{best:['INTP','INFP'],good:['INTJ','ENTP'],neutral:['ESTJ','ENFJ'],hard:['ISFP','ESFP']}},
+  ENTP:{name:'Полемист',tagline:'Генератор идей и разрушитель устоявшихся концепций',
+    desc:'ENTP обожают сложные задачи, провокационные идеи и интеллектуальные дуэли. Они быстро схватывают суть системы и ищут нестандартные подходы. Им скучно реализовывать чужие идеи — они хотят генерировать свои. В IT они сильны как архитекторы, исследователи, DevRel или основатели продуктов на раннем этапе.',
+    strengths:['Скорость мышления','Нестандартные решения','Харизма','Адаптивность'],
+    weaknesses:['Непоследовательность','Избегание монотонной работы','Споры ради споров','Много начатых дел'],
+    compat:{best:['INTJ','INFJ'],good:['ENTJ','INTP','ENFP'],neutral:['ESTP'],hard:['ISFJ','ESFJ']}},
+  INFJ:{name:'Советник',tagline:'Редкий идеалист с интуицией о системах и людях',
+    desc:'INFJ сочетают глубокую эмпатию со стратегическим видением. Они понимают людей на уровне, который сложно объяснить — просто чувствуют. У них чёткие внутренние ценности, которые они не готовы предавать. В технической среде они часто привносят человеческое измерение: UX-исследования, этика AI, продукты с глубоким смыслом.',
+    strengths:['Эмпатия и интуиция','Стратегическое видение','Целеустремлённость','Глубина суждений'],
+    weaknesses:['Перфекционизм','Избегание конфликтов','Риск выгорания','Чувствительность к критике'],
+    compat:{best:['ENFP','ENTP'],good:['INTJ','INFP','ENFJ'],neutral:['ISFJ'],hard:['ESTP','ESFP','ISTP']}},
+  INFP:{name:'Медиатор',tagline:'Идеалист с богатым внутренним миром и сильными ценностями',
+    desc:'INFP смотрят на работу через призму смысла и ценностей. Им важно, чтобы то, что они делают, имело значение. Их внутренний мир богат и сложен, хотя снаружи они могут казаться тихими. В IT они тяготеют к дизайну, контенту, этике технологий, образовательным продуктам — туда, где есть человеческий смысл.',
+    strengths:['Эмпатия','Творческое мышление','Верность ценностям','Открытость идеям'],
+    weaknesses:['Чрезмерная чувствительность','Избегание конфликтов','Идеализм над реализмом','Непрактичность'],
+    compat:{best:['ENFJ','ENTJ'],good:['INFJ','ENFP','INTJ'],neutral:['ISFP'],hard:['ESTJ','ESTP']}},
+  ENFJ:{name:'Наставник',tagline:'Вдохновитель, который видит потенциал в каждом человеке',
+    desc:'ENFJ — харизматичные лидеры, живущие ради людей. Они умеют мотивировать, объединять и вести команды к общей цели. ENFJ тонко чувствуют групповую динамику и умеют разрешать конфликты так, что все уходят довольными. В IT они сильны как тимлиды, менеджеры продуктов, Engineering Managers.',
+    strengths:['Лидерство','Эмпатия','Организаторские навыки','Умение мотивировать'],
+    weaknesses:['Жертвенность до выгорания','Чувствительность к критике','Идеализм','Зависимость от одобрения'],
+    compat:{best:['INFP','INTP'],good:['INFJ','ENFP'],neutral:['ESFJ'],hard:['ISTP','ESTP']}},
+  ENFP:{name:'Активист',tagline:'Энергичный исследователь возможностей и человеческих связей',
+    desc:'ENFP — это энергия, идеи и человечность в одном флаконе. Они загораются новыми проектами и людьми. Их интуиция на потенциал — как людей, так и идей — поразительна. ENFP нуждаются в разнообразии и свободе: монотонность убивает их. В IT они сильны в продуктовом дизайне, стартап-культуре, DevRel, обучении.',
+    strengths:['Энтузиазм','Креативность','Эмпатия','Адаптивность'],
+    weaknesses:['Непостоянство','Сложности с фокусом','Избегание рутины','Сверхоптимизм'],
+    compat:{best:['INTJ','INFJ'],good:['ENFJ','ENTP','INFP'],neutral:['ESFP'],hard:['ISTJ','ESTJ']}},
+  ISTJ:{name:'Инспектор',tagline:'Надёжный хранитель качества, порядка и обязательств',
+    desc:'ISTJ делают то, что обещали — в срок и качественно. Они не боятся рутины, находят удовлетворение в чётком исполнении. ISTJ уважают проверенные методы и осторожно относятся к изменениям без явной необходимости. В IT они незаменимы в тестировании, DevOps, системном администрировании — там, где от точности зависит стабильность.',
+    strengths:['Надёжность','Ответственность','Внимание к деталям','Системность'],
+    weaknesses:['Сопротивление изменениям','Жёсткость в процессах','Трудности с гибкостью','Закрытость к новому'],
+    compat:{best:['ESFP','ENFP'],good:['ISFJ','ESTJ'],neutral:['INTJ','ISTP'],hard:['ENTP','INFP']}},
+  ISFJ:{name:'Защитник',tagline:'Внимательный и надёжный человек, который всегда рядом',
+    desc:'ISFJ — самые заботливые и внимательные. Они помнят детали о людях и делают всё, чтобы команда чувствовала себя комфортно. Надёжны и последовательны, предпочитают знакомое новому. В IT их ценят за внимательность к пользователям, поддержку команды, умение делать сложные вещи понятными.',
+    strengths:['Забота о команде','Надёжность','Внимательность к деталям','Терпение'],
+    weaknesses:['Скромность до самоотречения','Сложности с отказом','Избегание конфликтов','Консерватизм'],
+    compat:{best:['ESTP','ESFP'],good:['ISTJ','ESFJ'],neutral:['INFJ'],hard:['ENTP','ENTJ']}},
+  ESTJ:{name:'Администратор',tagline:'Человек-система, который держит всё под контролем',
+    desc:'ESTJ знают, как должны работать системы, и не успокоятся, пока всё не встанет на место. Ценят чёткие правила и ответственность. Не боятся брать на себя управление и принимать жёсткие решения. В IT часто становятся проект-менеджерами, тимлидами, специалистами по информационной безопасности.',
+    strengths:['Организованность','Ответственность','Прямолинейность','Надёжность в кризисе'],
+    weaknesses:['Негибкость','Доминантность','Трудности с эмоциями','Резкость в коммуникации'],
+    compat:{best:['ISFP','INFP'],good:['ISTJ','ESFJ'],neutral:['ENTJ','ISTP'],hard:['ENFP','INTP']}},
+  ESFJ:{name:'Консул',tagline:'Центр команды — объединяет, поддерживает, организует',
+    desc:'ESFJ создают атмосферу, в которой люди чувствуют себя принятыми. Очень чуткие к социальным сигналам и мнению окружающих. Им важно, чтобы в команде было хорошо всем. В IT они сильны в поддержке пользователей, HR технологических компаний, менеджменте.',
+    strengths:['Социальный интеллект','Забота о других','Организованность','Лояльность'],
+    weaknesses:['Зависимость от одобрения','Избегание конфликтов','Консерватизм','Жертвенность'],
+    compat:{best:['ISFP','INFP'],good:['ISFJ','ESTJ'],neutral:['ENFJ','ESFP'],hard:['ENTP','INTP']}},
+  ISTP:{name:'Виртуоз',tagline:'Хладнокровный мастер, действующий точно и в нужный момент',
+    desc:'ISTP — это мастерство и действие. Они не говорят — они делают. Любят разбираться, как работают вещи, и находить самый эффективный путь. Не любят лишних правил. В экстремальных ситуациях на удивление спокойны. В IT сильны как low-level разработчики, специалисты по безопасности, embedded-программисты.',
+    strengths:['Практичность','Спокойствие под давлением','Техническая глубина','Независимость'],
+    weaknesses:['Замкнутость','Непредсказуемость','Скука от рутины','Трудности с обязательствами'],
+    compat:{best:['ESFJ','ESTJ'],good:['ISFJ','ESTP'],neutral:['INTJ','INTP'],hard:['ENFJ','INFJ']}},
+  ISFP:{name:'Художник',tagline:'Чуткий и гибкий творец, живущий настоящим',
+    desc:'ISFP воспринимают мир через ощущения и эстетику. Они не навязываются — они просто есть рядом. Обладают тонким вкусом и глубокими ценностями. В IT тяготеют к UI/UX, геймдизайну, визуальному программированию — местам, где техника встречается с творчеством.',
+    strengths:['Творчество','Эмпатия','Адаптивность','Открытость опыту'],
+    weaknesses:['Избегание конфликтов','Трудности с долгосрочными планами','Непредсказуемость','Чувствительность'],
+    compat:{best:['ESFJ','ESTJ'],good:['ISFJ','ESFP'],neutral:['INFP'],hard:['ENTJ','ENTP']}},
+  ESTP:{name:'Делец',tagline:'Решительный и наблюдательный — действует быстро и читает людей',
+    desc:'ESTP — энергия действия. Они не анализируют часами — прыгают в ситуацию и разбираются по ходу. Харизматичные и наблюдательные, отлично читают людей и ситуации. Обожают вызовы и скучают в рутине. В IT сильны в стартапах, sales engineering, DevRel.',
+    strengths:['Решительность','Наблюдательность','Харизма','Адаптивность'],
+    weaknesses:['Импульсивность','Нетерпеливость','Поверхностность','Трудности с обязательствами'],
+    compat:{best:['ISFJ','ISTJ'],good:['ESFP','ISTP'],neutral:['ENTJ','ESTJ'],hard:['INFJ','INTJ']}},
+  ESFP:{name:'Артист',tagline:'Живой, открытый — заряжает команду энергией и вовлечённостью',
+    desc:'ESFP обожают людей, ощущения, новые впечатления. Живут на полную и умеют заражать энтузиазмом. Практичны и наблюдательны, но не любят долгосрочного планирования. В IT ярки в community management, event-технологиях, обучении пользователей.',
+    strengths:['Энтузиазм','Коммуникабельность','Практичность','Жизнерадостность'],
+    weaknesses:['Импульсивность','Трудности с фокусом','Чувствительность к критике','Избегание рутины'],
+    compat:{best:['ISTJ','ISFJ'],good:['ESTP','ISFP'],neutral:['ENFP','ESFJ'],hard:['INTJ','INTP']}},
+};
+
+const TYPE_ORDER = ['INTJ','INTP','ENTJ','ENTP','INFJ','INFP','ENFJ','ENFP','ISTJ','ISFJ','ESTJ','ESFJ','ISTP','ISFP','ESTP','ESFP'];
+
+// ═══════════════════════════════════
+//  STATE
+// ═══════════════════════════════════
+let cur = 0;
+let answers = new Array(TOTAL_Q).fill(null);
+
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  window.scrollTo(0,0);
+}
+function startQuiz(){show('quiz');renderQ();}
+function retake(){answers=new Array(TOTAL_Q).fill(null);cur=0;show('quiz');renderQ();}
+
+function renderQ(){
+  const q = ALL_Q[cur];
+  const isIT = cur >= MBTI_LEN;
+  const phase = isIT ? 'Часть 2 — IT-профиль' : 'Часть 1 — Тип личности';
+  document.getElementById('qphase').textContent = phase;
+  document.getElementById('q-num').textContent = `${cur+1} / ${TOTAL_Q}`;
+  const pct = Math.round((cur+1)/TOTAL_Q*100);
+  document.getElementById('q-pct').textContent = pct+'%';
+  document.getElementById('qfill').style.width = pct+'%';
+  document.getElementById('q-dim').textContent = q.label || (isIT ? 'IT-профиль' : DIMS[q.dim].la+' vs '+DIMS[q.dim].lb);
+  document.getElementById('q-text').textContent = q.text;
+
+  const opts = document.getElementById('q-opts');
+  opts.innerHTML='';
+
+  if(isIT){
+    // 4 options with custom text
+    q.opts.forEach((o,i)=>{
+      const letters=['A','B','C','D'];
+      const div=document.createElement('div');
+      div.className='qopt'+(answers[cur]===i?' sel':'');
+      div.innerHTML=`<div class="opt-key">${letters[i]}</div><div>${o.text}</div>`;
+      div.onclick=()=>selOpt(i);
+      opts.appendChild(div);
+    });
+  } else {
+    // A/B
+    ['a','b'].forEach((l,i)=>{
+      const div=document.createElement('div');
+      div.className='qopt'+(answers[cur]===l?' sel':'');
+      div.innerHTML=`<div class="opt-key">${l.toUpperCase()}</div><div>${q[l]}</div>`;
+      div.onclick=()=>selOpt(l);
+      opts.appendChild(div);
+    });
+  }
+
+  document.getElementById('btn-prev').disabled=(cur===0);
+  document.getElementById('btn-next').disabled=(answers[cur]===null);
+  document.getElementById('btn-next').textContent=cur===TOTAL_Q-1?'Узнать результат':'Далее';
+}
+
+function selOpt(val){
+  answers[cur]=val;
+  document.querySelectorAll('.qopt').forEach((el,i)=>{
+    const v = cur>=MBTI_LEN ? i : ['a','b'][i];
+    el.classList.toggle('sel',v===val);
+  });
+  document.getElementById('btn-next').disabled=false;
+  // show section transition at q40
+  if(cur===MBTI_LEN-1){
+    setTimeout(()=>nextQ(),300);
+  } else if(cur<TOTAL_Q-1){
+    setTimeout(()=>nextQ(),300);
+  } else {
+    setTimeout(()=>showResult(),300);
+  }
+}
+
+function nextQ(){
+  if(cur<TOTAL_Q-1){cur++;renderQ();}
+  else showResult();
+}
+function prevQ(){if(cur>0){cur--;renderQ();}}
+
+// ═══════════════════════════════════
+//  RESULT
+// ═══════════════════════════════════
+function calcMBTI(){
+  const sc={E:0,I:0,S:0,N:0,T:0,F:0,J:0,P:0};
+  Q_MBTI.forEach((q,i)=>{
+    const a=answers[i];
+    if(a==null)return;
+    sc[DIMS[q.dim][a]]++;
+  });
+  const type=(sc.E>=sc.I?'E':'I')+(sc.S>=sc.N?'S':'N')+(sc.T>=sc.F?'T':'F')+(sc.J>=sc.P?'J':'P');
+  return{type,sc};
+}
+
+function calcRole(){
+  const dims={Solo:0,Team:0,Deep:0,Broad:0,Build:0,Analyze:0,Lead:0,Execute:0};
+  Q_IT.forEach((q,qi)=>{
+    const ai=answers[MBTI_LEN+qi];
+    if(ai==null)return;
+    const opt=q.opts[ai];
+    Object.entries(opt.dims).forEach(([k,v])=>dims[k]=(dims[k]||0)+v);
+  });
+  return{dims,role:calcITRole(dims)};
+}
+
+async function showResult(){
+  const {type,sc}=calcMBTI();
+  const {dims,role}=calcRole();
+  const td=TYPES[type];
+
+  show('result');
+
+  document.getElementById('res-type').textContent=type;
+  document.getElementById('res-name').textContent=td.name;
+  document.getElementById('res-tagline').textContent=td.tagline;
+
+  // bars
+  const barsEl=document.getElementById('res-bars');
+  barsEl.innerHTML='';
+  [{a:'E',b:'I',la:'Экстраверсия',lb:'Интроверсия'},
+   {a:'S',b:'N',la:'Сенсорика',lb:'Интуиция'},
+   {a:'T',b:'F',la:'Логика',lb:'Этика'},
+   {a:'J',b:'P',la:'Решение',lb:'Восприятие'}].forEach(d=>{
+    const tot=sc[d.a]+sc[d.b];
+    const pA=tot>0?Math.round(sc[d.a]/tot*100):50;
+    const chosen=pA>=50?d.la:d.lb;
+    const pct=pA>=50?pA:100-pA;
+    const el=document.createElement('div');
+    el.className='rbar';
+    el.innerHTML=`<div class="rbar-head"><span class="rbar-la">${d.la} ${sc[d.a]}</span><span class="rbar-lb">${d.lb} ${sc[d.b]}</span></div>
+      <div class="rbar-track"><div class="rbar-fill" style="width:${pA}%"></div></div>
+      <div class="rbar-pct">${chosen} · ${pct}%</div>`;
+    barsEl.appendChild(el);
+  });
+
+  // IT role
+  document.getElementById('role-name').textContent=role.name;
+  document.getElementById('role-tagline').textContent=role.tagline;
+  document.getElementById('role-skills').innerHTML=role.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('');
+
+  // desc
+  document.getElementById('res-desc').textContent=td.desc;
+  document.getElementById('res-str').innerHTML=td.strengths.map(s=>`<div class="sw-item s"><span class="sw-dot"></span>${s}</div>`).join('');
+  document.getElementById('res-weak').innerHTML=td.weaknesses.map(w=>`<div class="sw-item w"><span class="sw-dot"></span>${w}</div>`).join('');
+
+  // compat
+  const cg=document.getElementById('res-compat');
+  cg.innerHTML='';
+  TYPE_ORDER.forEach(t=>{
+    const c=td.compat;
+    let cls='neutral',lbl='Нейтрально';
+    if(c.best.includes(t)){cls='best';lbl='Идеально';}
+    else if(c.good.includes(t)){cls='good';lbl='Хорошо';}
+    else if(c.hard.includes(t)){cls='hard';lbl='Сложно';}
+    const div=document.createElement('div');
+    div.className=`ci ${cls}`;
+    div.innerHTML=`<div class="ci-type">${t}</div><div class="ci-lbl">${lbl}</div>`;
+    cg.appendChild(div);
+  });
+
+  // all types
+  const tg=document.getElementById('all-types');
+  tg.innerHTML='';
+  const detail=document.getElementById('type-detail');
+  TYPE_ORDER.forEach(t=>{
+    const d=TYPES[t];
+    const p=document.createElement('div');
+    p.className='tp'+(t===type?' act':'');
+    p.innerHTML=`<div class="tp-code">${t}</div><div class="tp-name">${d.name}</div>`;
+    p.onclick=()=>{
+      tg.querySelectorAll('.tp').forEach(x=>x.classList.remove('act'));
+      p.classList.add('act');
+      detail.innerHTML=`<strong style="font-family:'Syne',sans-serif;font-size:.95rem;color:var(--a1);">${t} — ${d.name}</strong><br><em style="color:var(--muted2);font-size:.8rem;">${d.tagline}</em><br><br>${d.desc}`;
+      detail.classList.add('vis');
+    };
+    tg.appendChild(p);
+  });
+  // default: current type
+  detail.innerHTML=`<strong style="font-family:'Syne',sans-serif;font-size:.95rem;color:var(--a1);">${type} — ${td.name}</strong><br><em style="color:var(--muted2);font-size:.8rem;">${td.tagline}</em><br><br>${td.desc}`;
+  detail.classList.add('vis');
+
+  // save to stats
+  await saveResult({
+    type,
+    role:role.name,
+    scores:{E:sc.E,I:sc.I,S:sc.S,N:sc.N,T:sc.T,F:sc.F,J:sc.J,P:sc.P},
+    roleDims:dims,
+    date:new Date().toLocaleDateString('ru-RU'),
+  });
+}
+</script>
+</body>
+</html>
