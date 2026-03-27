@@ -530,7 +530,7 @@ const PASS = 'fit2026';
 
 // Отправляет одну строку результата в Google Sheets через GET (без CORS-проблем)
 async function saveResult(entry){
-  if(GAS_URL === 'https://script.google.com/macros/s/AKfycbwxSN3fqEPrlOnTs2FP0VHKLDx3V9LVcFGwA1nu2Y20sSS5qZjmMunyv5dD2fed6Du1/exec'){
+  if(GAS_URL !== 'https://script.google.com/macros/s/AKfycbwxSN3fqEPrlOnTs2FP0VHKLDx3V9LVcFGwA1nu2Y20sSS5qZjmMunyv5dD2fed6Du1/exec'){
     console.warn('GAS URL не настроен.');
     return;
   }
@@ -554,7 +554,7 @@ async function saveResult(entry){
 
 // Загружает все строки из Google Sheets для страницы статистики
 async function loadStats(){
-  if(GAS_URL === 'https://script.google.com/macros/s/AKfycbwxSN3fqEPrlOnTs2FP0VHKLDx3V9LVcFGwA1nu2Y20sSS5qZjmMunyv5dD2fed6Du1/exec') return [];
+  if(GAS_URL !== 'https://script.google.com/macros/s/AKfycbwxSN3fqEPrlOnTs2FP0VHKLDx3V9LVcFGwA1nu2Y20sSS5qZjmMunyv5dD2fed6Du1/exec') return [];
   try{
     const url = GAS_URL + '?action=read';
     const r = await fetch(url);
@@ -651,7 +651,7 @@ async function renderStats(){
 
 function exportStats(){
   // Открываем Google Sheets напрямую — удобнее чем JSON
-  if(GAS_URL === 'https://script.google.com/macros/s/AKfycbwxSN3fqEPrlOnTs2FP0VHKLDx3V9LVcFGwA1nu2Y20sSS5qZjmMunyv5dD2fed6Du1/exec'){
+  if(GAS_URL !== 'https://script.google.com/macros/s/AKfycbwxSN3fqEPrlOnTs2FP0VHKLDx3V9LVcFGwA1nu2Y20sSS5qZjmMunyv5dD2fed6Du1/exec'){
     alert('Настройте Google Apps Script URL сначала.');
     return;
   }
