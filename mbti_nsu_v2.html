@@ -219,8 +219,9 @@ body::after{
   animation:pop .5s cubic-bezier(.175,.885,.32,1.275) both;
 }
 .rname{
-  font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;
+  font-family:'Syne',sans-serif;font-size:clamp(.8rem,3vw,1.1rem);font-weight:700;
   color:var(--a1);margin-bottom:.4rem;letter-spacing:.04em;text-transform:uppercase;
+  overflow-wrap:break-word;
 }
 .rtagline{color:var(--muted2);font-size:.9rem;max-width:380px;margin:0 auto 2rem;line-height:1.6;}
 .rbars{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
@@ -249,8 +250,8 @@ body::after{
   color:var(--a2);font-weight:600;margin-bottom:.6rem;
 }
 .itrole-name{
-  font-family:'Syne',sans-serif;font-size:1.6rem;font-weight:800;
-  color:#fff;margin-bottom:.4rem;
+  font-family:'Syne',sans-serif;font-size:clamp(1.1rem,4vw,1.6rem);font-weight:800;
+  color:#fff;margin-bottom:.4rem;overflow-wrap:break-word;
 }
 .itrole-tagline{color:var(--muted2);font-size:.88rem;margin-bottom:1.2rem;line-height:1.6;}
 .itrole-skills{display:flex;flex-wrap:wrap;gap:.4rem;}
